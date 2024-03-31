@@ -10,7 +10,7 @@ function Start-ProcessWithCheck {
 
     do {
         for ($i = 5; $i -gt 0; $i--) {
-            Write-Host "$i seconds to start $processName.exe"
+            Write-Host "$i 秒后开始运行$processName"
             Start-Sleep -Seconds 1
         }
 
@@ -19,13 +19,13 @@ function Start-ProcessWithCheck {
         Start-Sleep -Seconds 2  # Wait for a while to let the process start
 
         if (Get-Process $processName -ErrorAction SilentlyContinue) {
-            Write-Host "$processName is runningbo(*≧▽≦)ツ┏━┓" -ForegroundColor Green
+            Write-Host "$processName 成功运行 (*≧▽≦)ツ┏━┓" -ForegroundColor Green
             start-sleep -Seconds 2
             break
         }
         else {
-            Write-Host "$processName is not running(‘◇’)?."
-            $userInput = Read-Host "Do you want to retry? (Y/N)"
+            Write-Host "$processName 未运行(‘◇’)?."
+            $userInput = Read-Host "是否要重试？ (Y/N)"
             if ([string]::IsNullOrEmpty($userInput)) {
                 $userInput = 'y'
             }
@@ -33,7 +33,7 @@ function Start-ProcessWithCheck {
     } while ($userInput -eq 'Y' -or $userInput -eq 'y')
 
     if ($userInput -ne 'Y' -and $userInput -ne 'y') {
-        Write-Host "Exiting the script..."
+        Write-Host "正在退出脚本..."
     }
 }
 
