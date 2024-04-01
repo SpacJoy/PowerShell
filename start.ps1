@@ -9,7 +9,7 @@ param (
 )
 
 do {
-    for ($i = 5; $i -gt 0; $i--) {
+    for ($i = 10; $i -gt 0; $i--) {
         Write-Host "$i 秒后开始运行$processName"
         Start-Sleep -Seconds 1
     }
@@ -39,7 +39,5 @@ do {
 if ($userInput -ne 'Y' -and $userInput -ne 'y') {
     Write-Host "正在退出脚本..."
 }
-# }
 
-# Start-ProcessWithCheck -processName "HiPcMijia.UI" -processPath "C:\Users\chen6\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\HiPcMijia.UI.lnk"
 
