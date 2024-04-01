@@ -111,7 +111,10 @@ write-host "请稍后...." -ForegroundColor Blue
 $response = Invoke-WebRequest -Uri "$url"
 Write-Host "$response"
 if ($response.Content | Select-String -Pattern '"result":"ok"') {
-    Write-Host "找到 'result:ok'``n登陆成功" -ForegroundColor Green
+    Write-Host "找到 'result:ok'``n登陆成功``n" -ForegroundColor Green
+    Write-Host "3秒后将自动退出..." -ForegroundColor Yellow
+    Start-Sleep -Seconds 3
+    exit
 }
 else {
     Write-Host "未找到 'result:ok'``n登陆失败！！！" -ForegroundColor Red
