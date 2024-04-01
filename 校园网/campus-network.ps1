@@ -1,6 +1,5 @@
 function menu {
     $multiLineString = @"
-提示：`n
 需要先获取到校园网的登陆链接[○･｀Д´･○]`
 在github上有图文教程！！！！`n
 tips:点击鼠标右键可以直接粘贴(无需Ctrl+V)"( ´ ▽ ` )ﾉ"`n
@@ -78,7 +77,7 @@ function InputUrl {
     $response = VisitUrl -url "$url"
     Write-Host "$response"
     if ($response.Content | Select-String -Pattern '"result":"ok"') {
-        Write-Host "找到 'result:ok'登陆成功`n" -ForegroundColor Green
+        Write-Host "找到 'result:ok'测试登陆成功`n" -ForegroundColor Green
         Create -url $url
     }
     else {
@@ -93,7 +92,7 @@ function VisitUrl {
     param (
         [string]$url
     )
-    Write-Host "测试中！请稍后..." -ForegroundColor Blue
+    Write-Host "测试中！`n请稍后..." -ForegroundColor Blue
     $response = Invoke-WebRequest -Uri $url
     return $response
 }
@@ -112,11 +111,10 @@ write-host "请稍后...." -ForegroundColor Blue
 $response = Invoke-WebRequest -Uri "$url"
 Write-Host "$response"
 if ($response.Content | Select-String -Pattern '"result":"ok"') {
-    Write-Host "找到 'result:ok'登陆成功" -ForegroundColor Green
+    Write-Host "找到 'result:ok'``n登陆成功" -ForegroundColor Green
 }
 else {
-    Write-Host "未找到 'result:ok'"
-    Write-Host "登陆失败！！！" -ForegroundColor Red
+    Write-Host "未找到 'result:ok'``n登陆失败！！！" -ForegroundColor Red
     Read-Host '按 Enter 键退出...'
 }
 "@
