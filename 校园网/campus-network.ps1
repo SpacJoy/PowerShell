@@ -84,7 +84,7 @@ function InputUrl {
         Write-Host "未找到 'result:ok'`n"
         Write-Host "登陆失败！！！`n" -ForegroundColor Red
         Read-Host '按 Enter 键继续...'
-        menu
+        Create -url $url
     }
 }
 # 访问url链接
@@ -104,13 +104,12 @@ function Create {
     $startupPath = [Environment]::GetFolderPath('Startup')
     $filePath = Join-Path -Path $startupPath -ChildPath "登陆校园网.ps1"
     New-Item -Path $filePath -ItemType "file" -Force
-    $response = "$" + "response"
     $script = @"
 Write-Host "正在登陆中...." -ForegroundColor Yellow
 write-host "请稍后...." -ForegroundColor Blue
-$response = Invoke-WebRequest -Uri "$url"
-Write-Host "$response"
-if ($response.Content | Select-String -Pattern '"result":"ok"') {
+`$response = Invoke-WebRequest -Uri "$url"
+Write-Host "`$response"
+if (`$response.Content | Select-String -Pattern '"result":"ok"') {
     Write-Host "找到 'result:ok'``n登陆成功``n" -ForegroundColor Green
     Write-Host "3秒后将自动退出..." -ForegroundColor Yellow
     Start-Sleep -Seconds 3
