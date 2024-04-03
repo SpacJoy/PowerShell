@@ -21,9 +21,14 @@ else {
     # 启动 WiFi 网络
     #netsh wlan start hostednetwork
     # 使用 netsh 命令连接到 WiFi 网络
-    netsh wlan connect name="$ssid"
-    # 等待连接成功
-    Write-Host "连接成功！"-ForegroundColor Green
-    start-sleep -Seconds 3
-    exit
+    if ($wifi -match $ssid) {
+        Write-Host "WiFi 已连接" -ForegroundColor Green
+        start-sleep -Seconds 3
+        exit
+    }
+    else {
+        Write-Host "WiFi 连接失败" -ForegroundColor Red
+        start-sleep -Seconds 3
+        exit
+    }
 }
