@@ -5,8 +5,6 @@ param (
     [Parameter(Mandatory = $true)]
     [SecureString]$password
 )
-# $ssid = "Internet"
-# $password = "chen6019"
 # 检查wifi是否已经连接
 $wifi = netsh wlan show interfaces | Select-String -Pattern "SSID"
 # $wifi = (netsh wlan show interfaces) -join "`n"
