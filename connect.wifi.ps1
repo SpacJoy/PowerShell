@@ -21,7 +21,7 @@ else {
     # 创建一个新的 WiFi 配置文件
     netsh wlan set hostednetwork mode=allow ssid="$ssid" key="$password"
     # 启动 WiFi 网络
-    netsh wlan start hostednetwork
+    #netsh wlan start hostednetwork
     # 使用 netsh 命令连接到 WiFi 网络
     netsh wlan connect name="$ssid"
     # 等待连接成功
