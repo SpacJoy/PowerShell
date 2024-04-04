@@ -18,22 +18,23 @@ if ($wifiInfo) {
 }
 else {
     Write-Host "WiFi 未连接"
-    write-host "正在连接到 WiFi 网络：$ssid"
-    # 创建一个新的 WiFi 配置文件
-    netsh wlan set hostednetwork mode=allow ssid="$ssid" key="$password"
-    # 启动 WiFi 网络
-    #netsh wlan start hostednetwork
-    # 使用 netsh 命令连接到 WiFi 网络
-    netsh wlan connect name="$ssid"
-    start-sleep -Seconds 5
-    if ($wifi -match $ssid) {
-        Write-Host "WiFi 已连接$wifi" -ForegroundColor Green
-        start-sleep -Seconds 5
-        exit
-    }
-    else {
-        Write-Host "WiFi 连接失败$wifi" -ForegroundColor Red
-        start-sleep -Seconds 5
-        exit
-    }
+        write-host "正在连接到 WiFi 网络：$ssid"
+        netsh wlan set hostednetwork mode=allow ssid="$ssid" key="$password"
+        netsh wlan connect name="$ssid"
+        write-host "正在连接到 WiFi 网络：$ssid `n请稍后"
+        start-sleep -Seconds 10
+        $wifi = netsh wlan show interfaces | Where-Object { $_ -match '^\s*SSID' }
+        if ($wifi) {
+            $ssid2 = ($wifi -split ':')[1].Trim()
+            if ($ssid2) {
+                Write-Host "WiFi 已连接$wifi2" -ForegroundColor Green
+                start-sleep -Seconds 5
+                exit
+            }
+            else {
+                Write-Host "WiFi 连接失败$wifi2`n请自行检查是否连接成功" -ForegroundColor Red
+                start-sleep -Seconds 5
+                exit
+            }
+        }
 }
