@@ -1,6 +1,6 @@
 # **`本脚本仅供学习交流使用,请勿用于非法用途,否则后果自负!`**
 # **`注意事项:请确保PowerShell 7及以上版本已安装,否则请先安装PowerShell 7及以上版本`**
-# PowerShell 7下载地址:[powershell 7]([链接地址](https://learn.microsoft.com/zh-cn/powershell/))
+# PowerShell 7下载地址:[powershell 7](https://learn.microsoft.com/zh-cn/powershell/)
 # **使用步骤:**
 ### 1. 下载   `campus-network.ps1`    脚本,并放到任意文件夹，需要有写入权限，比如桌面和下载目录。
 ***
