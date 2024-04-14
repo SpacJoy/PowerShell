@@ -1,7 +1,7 @@
 function menu {
     $multiLineString = @"
-需要先获取到校园网的登陆链接[○･｀Д´･○]`
-在github上有图文教程！！！！`n
+先打开校园网的登陆链接检查是否能连接校园网[○･｀Д´･○]`
+能正常打开校园网登陆链接就可以进行第二步操作啦(●'◡'●)ﾉ♥`n
 tips:点击鼠标右键可以直接粘贴(无需Ctrl+V)"( ´ ▽ ` )ﾉ"`n
 "@
     Write-Host $multiLineString -ForegroundColor Green
@@ -73,18 +73,29 @@ function CreateScript {
 
 #校验链接是否能登陆校园网
 function InputUrl {
-    $url = Read-Host "请输入校园网的登陆链接`n"
+    $date = Get-Date
+
+    $unixEpoch = [DateTime]::new(1970, 1, 1, 0, 0, 0, [DateTimeKind]::Utc)
+    $timestamp = [Math]::Truncate(($date.ToUniversalTime() - $unixEpoch).TotalMilliseconds)
+
+    Write-Host "时间戳：$timestamp"
+    $account = Read-Host "请输入账号"
+    $password = Read-Host "请输入密码"
+    $url = "http://172.17.100.200:801/eportal/?c=GetMsg&a=loadToken&callback=jQuery_$timestamp&account=$account&password=$password&mac=000000000000&_=$timestamp"
     $response = VisitUrl -url "$url"
     Write-Host "$response"
     if ($response.Content | Select-String -Pattern '"result":"ok"') {
         Write-Host "找到 'result:ok'测试登陆成功`n" -ForegroundColor Green
-        Create -url $url
+        Create -account $account -password $password
     }
     else {
         Write-Host "未找到 'result:ok'`n"
         Write-Host "登陆失败！！！`n" -ForegroundColor Red
+        write-host "登陆使用的链接：$url`n" -ForegroundColor Blue
+        write-host "返回值：$response`n" -ForegroundColor Blue
+        Write-Host "请检查账号密码是否正确`n"
         Read-Host '按 Enter 键继续...'
-        Create -url $url
+        menu
     }
 }
 # 访问url链接
@@ -98,32 +109,40 @@ function VisitUrl {
 }
 function Create {
     param (
-        [string]$url
+        [string]$account,
+        [string]$password
     )
-
+    
     $startupPath = [Environment]::GetFolderPath('Startup')
     $filePath = Join-Path -Path $startupPath -ChildPath "登陆校园网.ps1"
     New-Item -Path $filePath -ItemType "file" -Force
     $script = @"
 Write-Host "正在登陆中...." -ForegroundColor Yellow
 write-host "请稍后...." -ForegroundColor Blue
-`$response = Invoke-WebRequest -Uri "$url"
+`$date = Get-Date
+
+`$unixEpoch = [DateTime]::new(1970, 1, 1, 0, 0, 0, [DateTimeKind]::Utc)
+`$timestamp = [Math]::Truncate((`$date.ToUniversalTime() - `$unixEpoch).TotalMilliseconds)
+
+Write-Host "时间戳：`$timestamp"
+`$response = Invoke-WebRequest -Uri "http://172.17.100.200:801/eportal/?c=GetMsg&a=loadToken&callback=jQuery_`$timestamp&account=$account&password=$password&mac=000000000000&_=`$timestamp"
+
 Write-Host "`$response"
 if (`$response.Content | Select-String -Pattern '"result":"ok"') {
-    Write-Host "找到 'result:ok'`n登陆成功`n" -ForegroundColor Green
+    Write-Host "找到 'result:ok'登陆成功" -ForegroundColor Green
     Write-Host "3秒后将自动退出..." -ForegroundColor Yellow
     Start-Sleep -Seconds 3
     exit
 }
 else {
-    Write-Host "未找到 'result:ok'`n登陆失败！！！" -ForegroundColor Red
+    Write-Host "未找到 'result:ok'登陆失败！！！" -ForegroundColor Red
     Write-Host "正在尝试连接wifi"
     `$ssid = Read-Host -Prompt "请输入 wifi 名称"
     `$password = Read-Host -Prompt "请输入密码"
     `$wifiInfo = netsh wlan show interfaces | Where-Object { `$_ -match '^\s*SSID' }
     if (`$wifiInfo) {
         `$ssid = (`$wifiInfo -split ':')[1].Trim()
-        if (`ssid) {
+        if (ssid) {
             Write-Host "已连接到 Wi-Fi 网络: `$ssid" -ForegroundColor Green
             start-sleep -Seconds 5
             exit
@@ -134,7 +153,7 @@ else {
         write-host "正在连接到 WiFi 网络：`$ssid"
         netsh wlan set hostednetwork mode=allow ssid="`$ssid" key="`$password"
         netsh wlan connect name="`$ssid"
-        write-host "正在连接到 WiFi 网络：`$ssid `n请稍后"
+        write-host "正在连接到 WiFi 网络：`$ssid 请稍后"
         start-sleep -Seconds 10
         `$wifi = netsh wlan show interfaces | Where-Object { `$_ -match '^\s*SSID' }
         if (`$wifi) {
@@ -145,7 +164,7 @@ else {
                 exit
             }
             else {
-                Write-Host "WiFi 连接失败`$wifi2`n请自行检查是否连接成功" -ForegroundColor Red
+                Write-Host "WiFi 连接失败`$wifi2请自行检查是否连接成功"-ForegroundColor Red
                 start-sleep -Seconds 5
                 exit
             }
@@ -153,7 +172,6 @@ else {
     }
 }
     
-
 "@
     Set-Content -Path $filePath -Value $script
 
