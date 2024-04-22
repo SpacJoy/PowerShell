@@ -9,7 +9,7 @@ param (
 )
 
 do {
-    for ($i = 10; $i -gt 0; $i--) {
+    for ($i = 5; $i -gt 0; $i--) {
         Write-Host "$i 秒后开始运行$processName"
         Start-Sleep -Seconds 1
     }
@@ -20,7 +20,7 @@ do {
     else {
         # 启动程序
         Start-Process $processPath
-        Start-Sleep -Seconds 2  # 等待x秒后检查程序启动结果
+        Start-Sleep -Seconds 5  # 等待x秒后检查程序启动结果
 
         if (Get-Process $processName -ErrorAction SilentlyContinue) {
             Write-Host "$processName 成功运行 (*≧▽≦)ツ┏━┓" -ForegroundColor Green
