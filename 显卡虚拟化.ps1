@@ -1,6 +1,6 @@
 $vm = "win10"
 # 查看
-# Get-VMGpuPartitionAdapter -VMName $vm
+Get-VMGpuPartitionAdapter -VMName $vm
 
 # 获取可分区的GPU列表
 # Get-VMHostPartitionableGpu
