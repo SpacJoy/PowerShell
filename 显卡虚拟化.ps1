@@ -23,3 +23,5 @@ Set-VM -HighMemoryMappedIoSpace 32GB -VMName $vm
 # 删除
 Remove-VMGpuPartitionAdapter -VMName $vm
 #>
+#等待10秒
+Start-Sleep -Seconds 10
